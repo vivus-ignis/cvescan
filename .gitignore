@@ -2,6 +2,8 @@
 /lib/
 /bin/
 /.shards/
+/misc/
+/test-data/
 *.dwarf
 cvescan
 cacert.pem
