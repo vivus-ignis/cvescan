@@ -1,0 +1,6 @@
+version: 1.0
+shards:
+  crest:
+    github: mamantoha/crest
+    version: 0.18.1
+

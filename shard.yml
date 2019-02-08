@@ -1,0 +1,17 @@
+name: cvescan
+version: 0.1.0
+
+authors:
+  - Yaroslav Tarasenko <yaroslav@devdataops.de>
+
+targets:
+  cvescan:
+    main: src/cvescan.cr
+
+dependencies:
+  crest:
+    github: mamantoha/crest
+
+crystal: 0.27.0
+
+license: MIT
