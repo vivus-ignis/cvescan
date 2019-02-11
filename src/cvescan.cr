@@ -33,4 +33,6 @@ module Cvescan
   end
 end
 
+{% if flag?(:build) %}
 Cvescan.main
+{% end %}
