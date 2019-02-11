@@ -1,4 +1,3 @@
-FROM debian:jessie
+FROM debian-jessie-base
 ARG user=ignis
-RUN apt-get update && apt-get install -y gdb
-RUN adduser $user
+RUN adduser --disabled-password $user
