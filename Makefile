@@ -1,4 +1,4 @@
-BUILD_OPTS := --debug --static --link-flags "-ldl -L/openssl -static"
+BUILD_OPTS := --debug --static --link-flags "-ldl -L/openssl -static" -Dbuild
 
 cvescan:
 	docker build -t cvescan-build .

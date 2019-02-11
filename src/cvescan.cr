@@ -1,5 +1,7 @@
+{% if flag?(:build) %}
 require "llvm/lib_llvm"
 require "llvm/enums"
+{% end %}
 
 require "option_parser"
 require "json"
