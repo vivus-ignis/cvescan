@@ -28,9 +28,11 @@ class VulnerabilitiesDeciderGenerator
       return VulnerabilitiesDecider::PythonSafetyDb.new package_manager
     when PackageManager::Npm
       return VulnerabilitiesDecider::NpmAudit.new package_manager
+    when PackageManager::Pacman
+      return VulnerabilitiesDecider::Dummy.new package_manager
     else
       raise NotSupported.new("No vulnerabilities decider defined for the combination of " \
-                               "#{distro} distribution and #{package_manager} package manager")
+                               "#{distro.class} distribution and #{package_manager.class} package manager")
     end
   end
 
