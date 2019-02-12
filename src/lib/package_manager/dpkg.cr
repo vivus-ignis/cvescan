@@ -54,16 +54,13 @@ class PackageManager::Dpkg < PackageManager
   private def dpkg_status_to_package_hashes(lines : Array(String)) : Array(Hash(String,String))
     Utils.ddump "dpkg_status", lines.join("\n")
 
-    p = lines.select { |line| line =~ /^(Package|Source|Status|Version):/ }
-
-    s = p.chunks { |x| x.starts_with? "Package: " }
-        .map { |x| x[1] }
-        .in_groups_of(2)
-        .map { |x| x.flatten }
-        .map { |pkg_a| pkg_a.map { |x| x.not_nil!.split(": ")}.to_h }
-
-    Utils.ddump("pkg_hashes", s)
-    s
+    lines
+      .select { |line| line =~ /^(Package|Source|Status|Version):/ }
+      .chunks { |x| x.starts_with? "Package: " }
+      .map { |x| x[1] }
+      .in_groups_of(2)
+      .map { |x| x.flatten }
+      .map { |pkg_a| pkg_a.map { |x| x.not_nil!.split(": ") }.to_h }
   end
 
   # two types of source values in /var/lib/dpkg/sources:
