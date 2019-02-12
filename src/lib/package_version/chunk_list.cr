@@ -1,20 +1,17 @@
 class PackageVersion::ChunkList
 
-  getter chunks : Array(Array(Int32))
+  getter chunks : Array(Array(UInt64))
 
-  # "5.1.1alpha+20120614" -> [[5], [1], [1], [97, 108, 112, 104, 97, 299], [2, 0, 1, 2, 0, 6, 1, 4]]
+  # 3.3.30  -> [[3], [302], [3], [302], [30]]
   def initialize(x : String)
     @chunks = x.chars
-              .chunks { |c| c.ascii_number? }
-              .map { |tpl| tpl[1].map { |c| char_to_number c } }
-  end
-
-  # ideas taken from Dpkg::Version.pm
-  private def char_to_number(c : Char)
-    if c.number?
-      c.to_i
-    else
-      encode_nondigit c
+              .chunks { |c| c.ascii_number? } # split when numbers end
+              .map do |tpl|
+      if tpl[1].first.number?
+        [ tpl[1].join("").to_u64 ] # numbers should be joined
+      else
+        tpl[1].map { |c| encode_nondigit(c).to_u64 } # non-numbers are treated one by one and encoded
+      end
     end
   end
 
@@ -32,7 +29,7 @@ class PackageVersion::ChunkList
   end
 
   # pad smaller of the two arrays with [0]'s
-  private def equalize(x : Array(Array(Int32)), y : Array(Array(Int32)))
+  private def equalize(x : Array(Array(UInt64)), y : Array(Array(UInt64)))
     if y.size < x.size
       diff = x.size - y.size
       y = y + (1..diff).map { |_| [0] }
