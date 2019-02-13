@@ -43,4 +43,10 @@ test-ubuntu: cvescan cacert.pem
 	  -v $(CURDIR)/cvescan:/usr/bin/cvescan -v $(CURDIR)/tmp:/tmp \
 	  -e CVESCAN_DEBUG=1 cvescan-ubuntu /usr/bin/cvescan
 
-.PHONY: clean test debug-debian test-debian test-ubuntu
+test-alpine: cvescan cacert.pem
+	docker build -t cvescan-alpine -f Dockerfile.alpine .
+	docker run --rm -u $(USER) \
+	  -v $(CURDIR)/cvescan:/usr/bin/cvescan -v $(CURDIR)/tmp:/tmp \
+	  -e CVESCAN_DEBUG=1 cvescan-alpine /usr/bin/cvescan
+
+.PHONY: clean test debug-debian test-debian test-ubuntu test-alpine
