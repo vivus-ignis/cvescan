@@ -75,20 +75,20 @@ class VulnerabilitiesDecider::Debsecan < VulnerabilitiesDecider
   private def maybe_vulnerable(pkg : Package, ap : Debsecan::DB::AffectedPackage) : (Vulnerability | Nil)
     vuln = Vulnerability.new(pkg, ap.cve.id, ap.cve.description)
 
-    Utils.dputs("Checking package\n\t#{pkg}\n\tagainst #{ap}")
+    # Utils.dputs("Checking package\n\t#{pkg}\n\tagainst #{ap}")
 
     unless ap.fixed_unstable_version.nil?
       return nil if pkg.source_package.version > ap.fixed_unstable_version.not_nil! ||
                     pkg.source_package.version == ap.fixed_unstable_version.not_nil!
     end
 
-    Utils.dputs("fixed unstable version check failed")
+    # Utils.dputs("fixed unstable version check failed")
 
     unless ap.fixed_backports_versions.nil?
       return nil if ap.fixed_backports_versions.not_nil!.includes?(pkg.source_package.version)
     end
 
-    Utils.dputs("fixed backports versions check failed")
+    # Utils.dputs("fixed backports versions check failed")
 
     vuln
   end
@@ -105,6 +105,7 @@ class VulnerabilitiesDecider::Debsecan < VulnerabilitiesDecider
   end
 
   def report
+    Utils.ddump("upgradable", @package_manager.upgradable.map { |x| x.name })
     @package_manager.upgradable.reduce([] of Vulnerability) do |acc, pkg|
       find_vulnerabilities_for(pkg).each do |vuln|
         Utils.dputs "Vulnerability found: #{vuln}"
