@@ -28,25 +28,34 @@ debug-debian: cvescan
 interact-debian: cvescan
 	docker run --rm -ti \
 	  -v $(CURDIR)/cvescan:/usr/bin/cvescan \
-	  -v $(CURDIR)/cacert.pem:/usr/local/ssl/cacert.pem \
+	  -v $(CURDIR)/cacert.pem:/usr/local/ssl/cert.pem \
 	  -e CVESCAN_DEBUG=1 cvescan-debian 
+
+interact-alpine: cvescan
+	docker run --rm -ti \
+	  -v $(CURDIR)/cvescan:/usr/bin/cvescan \
+	  -v $(CURDIR)/cacert.pem:/usr/local/ssl/cert.pem \
+	  -e CVESCAN_DEBUG=1 cvescan-alpine
 
 test-debian: cvescan cacert.pem
 	docker build -t cvescan-debian -f Dockerfile.debian .
 	docker run --rm -u $(USER) \
-	  -v $(CURDIR)/cvescan:/usr/bin/cvescan -v $(CURDIR)/cacert.pem:/usr/local/ssl/cert.pem -v $(CURDIR)/tmp:/tmp \
+	  -v $(CURDIR)/cvescan:/usr/bin/cvescan -v $(CURDIR)/tmp:/tmp \
+	  -v $(CURDIR)/cacert.pem:/usr/local/ssl/cert.pem \
 	  -e CVESCAN_DEBUG=1 cvescan-debian /usr/bin/cvescan
 
 test-ubuntu: cvescan cacert.pem
 	docker build -t cvescan-ubuntu -f Dockerfile.ubuntu .
 	docker run --rm -u $(USER) \
 	  -v $(CURDIR)/cvescan:/usr/bin/cvescan -v $(CURDIR)/tmp:/tmp \
+	  -v $(CURDIR)/cacert.pem:/usr/local/ssl/cert.pem \
 	  -e CVESCAN_DEBUG=1 cvescan-ubuntu /usr/bin/cvescan
 
 test-alpine: cvescan cacert.pem
 	docker build -t cvescan-alpine -f Dockerfile.alpine .
 	docker run --rm -u $(USER) \
 	  -v $(CURDIR)/cvescan:/usr/bin/cvescan -v $(CURDIR)/tmp:/tmp \
+	  -v $(CURDIR)/cacert.pem:/usr/local/ssl/cert.pem \
 	  -e CVESCAN_DEBUG=1 cvescan-alpine /usr/bin/cvescan
 
 .PHONY: clean test debug-debian test-debian test-ubuntu test-alpine
