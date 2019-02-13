@@ -15,11 +15,11 @@ class VulnerabilitiesDeciderGenerator
       end
     end
 
-    case package_manager.class
+    case package_manager
     when PackageManager::Rpm
       return VulnerabilitiesDecider::RpmToCve.new package_manager
     when PackageManager::Apk
-      return VulnerabilitiesDecider::AlpineSecDb.new package_manager
+      return VulnerabilitiesDecider::AlpineSecDb.new(package_manager, distro.release)
     when PackageManager::Gem
       return VulnerabilitiesDecider::RubyAdvisoryDb.new package_manager
     when PackageManager::Conda
