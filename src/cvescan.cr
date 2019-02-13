@@ -27,9 +27,13 @@ module Cvescan
       end
     end
 
-    system = Utils.detect_distro
-    vulns = system.vulnerabilities
-    plaintext ? vulns.to_s : vulns.to_json
+    elapsed_time = Time.measure do
+      system = Utils.detect_distro
+      vulns = system.vulnerabilities
+      plaintext ? vulns.to_s : vulns.to_json
+    end
+
+    Utils.dputs("Execution took #{elapsed_time}")
   end
 end
 
