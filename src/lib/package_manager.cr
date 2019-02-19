@@ -14,6 +14,8 @@ abstract class PackageManager
     @upgradable = upgradable
   end
 
+  abstract private def architecture : String
+
   abstract def installed : Array(Package)
 
   abstract def available : Array(Package)
