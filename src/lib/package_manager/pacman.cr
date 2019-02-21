@@ -1,4 +1,6 @@
 class PackageManager::Pacman < PackageManager
+  private def architecture ; end
+
   def installed
     [] of Package
   end
